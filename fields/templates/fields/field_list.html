@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+<script src="http://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  $('#table').DataTable({
+   "pagingType": "full_numbers",
+   "language": {
+        "info": "Показано с _START_ по _END_ из _TOTAL_ записей",
+        "search": "Поиск:",
+        "infoEmpty": "Показано с 0 по 0 из 0 записей",
+        "paginate": {
+           "first": "Первая страница",
+           "last": "Последняя страница",
+           "previous": "Назад",
+           "next": "Вперед",
+         }
+   }
+    });
+});
+
+
+
+</script>
+
+<div class="content">
+    <h3>Поля:</h3>
+
+    <a href="{% url 'fields:add_field' %}" class="btn btn-info mb-2">Добавить поле</a>
+
+    <table id="table">
+        <thead>
+        <tr>
+            <th>Название поля</th>
+            <th>Площадь</th>
+            <th>Сезон</th>
+            <th>Сев</th>
+            <th>Урожайность</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for info in data %}
+        <tr>
+            <td><a href="{{ info.field.get_absolute_url }}">{{ info.field.name }}</a></td>
+            <td>{{ info.field.square }}</td>
+            <td>{{ info.season.name }}</td>
+            <td>{{ info.culture.name }}</td>
+            <td>{{ info.season.actual_harvest }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        {% for field in fields %}
+        <a href="{{ field.get_absolute_url }}">
+            <li>
+                <p>Название поля: {{ field.name }}</p>
+                <p>Площадь поля: {{ field.square }} га</p>
+            </li>
+        </a>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

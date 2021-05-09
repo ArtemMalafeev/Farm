@@ -1,0 +1,36 @@
+body {
+    font-size: 14px;
+    background: #f7f7f7;
+    height: 100vh;
+}
+
+.block {
+    background-color: #957BBE;
+}
+
+.title-block {
+    font-size: 22px;
+}
+
+.asteriskField {
+    display: none;
+}
+
+.title {
+    margin-top: 15px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: #957BBE;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #4682B4;
+    font-size: 120%;
+}

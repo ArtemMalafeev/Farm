@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Информация по полю: </h2>
+<p>Название: {{ field.name }}</p>
+<p>Площаль поля: {{ field.square }} га.</p>
+<p>Координаты: {{ field.coordinate }}</p>
+<p>Кадастровый номер: {{ field.cadastral_number }}</p>
+
+<a href="{% url 'fields:edit_field' slug=field.slug %}" class="btn btn-info mb-2">Редактировать поле</a>
+
+<h3>Cевооборот:</h3>
+<ul>
+{% for crop in crops_list %}
+    <li>
+        <p>Сезон: {{ crop.season }}</p>
+        <p>Культура: {{ crop.culture }}</p>
+        <p>Фактический урожай: {{ crop.actual_harvest }} ц.</p>
+        <p>Плотность засева: {{ crop.density }}</p>
+    </li>
+{% endfor %}
+</ul>
+
+ <a href="№" class="btn btn-info mb-2">Редактировать севооборот</a>
+
+{% endblock %}

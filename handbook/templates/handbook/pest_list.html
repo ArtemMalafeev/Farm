@@ -1,0 +1,69 @@
+{% extends "handbook/category_base.html" %}
+
+{%  block info %}
+
+<div>
+{% if pests %}
+    {% for pest in pests %}
+        <li>
+            <p><a href="{{ pest.get_absolute_url }}"><strong>{{ pest.name }}</strong></a></p>
+            <p>{{ pest.description }}</p>
+        </li>
+    {% endfor %}
+{% else %}
+    <p>Поиск не дал результатов.</p>
+{% endif %}
+</div>
+
+<script>
+ymaps.ready(['util.calculateArea']).then(function () {
+    var myMap = new ymaps.Map("map", {
+                center: [55.73, 37.75],
+                zoom: 10
+            }, {
+                searchControlProvider: 'yandex#search'
+            });
+    var myPolygon = new ymaps.Polygon([], {}, {
+        // Курсор в режиме добавления новых вершин.
+        editorDrawingCursor: "crosshair",
+        // Максимально допустимое количество вершин.
+        editorMaxPoints: 5,
+        // Цвет заливки.
+        fillColor: '#00FF00',
+        // Цвет обводки.
+        strokeColor: '#0000FF',
+        // Ширина обводки.
+        strokeWidth: 5
+    });
+
+    // Добавляем многоугольник на карту.
+    myMap.geoObjects.add(myPolygon);
+
+    // В режиме добавления новых вершин меняем цвет обводки многоугольника.
+    var stateMonitor = new ymaps.Monitor(myPolygon.editor.state);
+    stateMonitor.add("drawing", function (newValue) {
+        myPolygon.options.set("strokeColor", newValue ? '#FF0000' : '#0000FF');
+    });
+
+    // Включаем режим редактирования с возможностью добавления новых вершин.
+    myPolygon.editor.startDrawing();
+
+    // You can calculate area of any type of ymaps.GeoObject.
+    var area = ymaps.util.calculateArea(myPolygon);
+
+    // Or you can calculate area of GeoJson feature.
+    var areaFromJson = ymaps.util.calculateArea({
+            type: 'Feature',
+            geometry: {
+                type: 'Rectangle',
+                coordinates: 'area',
+            }
+        });
+});
+</script>
+
+<body>
+    <div id="map" style="width: 600px; height: 400px"></div>
+</body>
+
+{% endblock %}

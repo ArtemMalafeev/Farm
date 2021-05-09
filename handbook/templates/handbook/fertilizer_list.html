@@ -1,0 +1,19 @@
+{% extends "handbook/category_base.html" %}
+
+{%  block info %}
+
+<div>
+{% if fertilizers %}
+    {% for fertilizer in fertilizers %}
+        <li>
+            ФосАгро
+            <p><a href="{{ fertilizer.get_absolute_url }}"><strong>{{ fertilizer.name }}</strong></a></p>
+            <p>{{ fertilizer.description }}</p>
+        </li>
+    {% endfor %}
+{% else %}
+    <p>Поиск не дал результатов.</p>
+{% endif %}
+</div>
+
+{% endblock %}

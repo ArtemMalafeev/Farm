@@ -1,0 +1,14 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<script src="{% static 'js/add_work.js' %}" defer></script>
+
+<div class="col-md-12">
+    <div id="alert-box"></div>
+    <form id="p-form" method="post">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+</div>
+{% endblock %}

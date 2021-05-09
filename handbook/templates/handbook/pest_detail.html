@@ -1,0 +1,17 @@
+{% extends "handbook/category_base.html" %}
+
+{% load static %}
+
+{%  block info %}
+
+<p><img src="{{ pest.image.url }}"></p>
+<p>Название: {{ pest.name }}</p>
+<p>Фаза развития: {{ pest.phase }}</p>
+<p>Поражаемые органы: {{ pest.organ }}</p>
+<p>Описание: {{ pest.description }}</p>
+<p>Регион распространения: {{ pest.region }}</p>
+<p>Культуры распространения: {% for culture in pest.culture.all %}
+    {{ culture }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}</p>
+
+{% endblock %}

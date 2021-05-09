@@ -1,0 +1,20 @@
+{% extends "handbook/category_base.html" %}
+
+{% load static %}
+
+{%  block info %}
+
+<p>Название: {{ fertilizer.name }}</p>
+<p>Единицы измерения: {{ fertilizer.units }}</p>
+<p>Цвет: {{ fertilizer.color }}</p>
+<p>Описание: {{ fertilizer.description }}</p>
+<p>Преимущества: {{ fertilizer.advantages }}</p>
+
+<p>Подходит для: {% for culture in fertilizer.culture.all %}
+    {{ culture }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}</p>
+<p>Состав: {% for composition in fertilizer.compositions.all %}
+    {{ composition.name }} ({{ composition.abbreviation }}){% if not forloop.last %}, {% endif %}
+    {% endfor %} </p>
+
+{% endblock %}

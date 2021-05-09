@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/handbook/content.css' %}">
+
+{% block category %}
+<div>
+    <div class="menu">
+        <div class="title-menu">
+            <h3>Справочники</h3>
+        </div>
+
+        <ul>
+            <a href="{% url 'handbook:fertilizer_list' %}"><li>Удобрения</li></a>
+            <a href="{% url 'handbook:pest_list' %}"><li>Болезни растений</li></a>
+            <a href="{{ fertilizer_list }}"><li>Вредители</li></a>
+            <a href="{{ fertilizer_list }}"><li>Виды работ</li></a>
+            <a href="{{ fertilizer_list }}"><li>Культуры</li></a>
+        </ul>
+    </div>
+
+    <div class="info">
+        {% block info %} {% endblock %}
+    </div>
+
+</div>
+{% endblock %}
