@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Информация по полю: </h2>
+<p>Название: {{ field.name }}</p>
+<p>Площаль поля: {{ field.square }} га.</p>
+<p>Координаты: {{ field.coordinate }}</p>
+<p>Кадастровый номер: {{ field.cadastral_number }}</p>
+
+<a href="{% url 'fields:edit_field' slug=field.slug %}" class="btn btn-outline-primary">Редактировать поле</a>
+
+<!--<h3>Cевооборот:</h3>-->
+<!--<ul>-->
+<!--    {% for crop in crops_list %}-->
+<!--    <li>-->
+<!--        <p>Сезон: {{ crop.season }}</p>-->
+<!--        <p>Культура: {{ crop.culture }}</p>-->
+<!--        <p>Фактический урожай: {{ crop.actual_harvest }} ц.</p>-->
+<!--        <p>Плотность засева: {{ crop.density }}</p>-->
+<!--        <a href="№" class="btn btn-outline-primary">Редактировать севооборот</a>-->
+<!--    </li>-->
+<!--    {% endfor %}-->
+<!--</ul>-->
+
+<h3 class="mt-3">Cевооборот:</h3>
+<div class="row row-cols-1 row-cols-md-4 mb-1 g-4">
+    {% for crop in crops_list %}
+    <div class="col">
+        <div class="card">
+            <img src="#" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ crop.culture }}</h5>
+                <p class="card-text">Планируемый урожай: {{ crop.planned_harvest }}</p>
+                <p class="card-text">Фактический урожай: {{ crop.actual_harvest }}</p>
+                <p class="card-text">Плотность засева: {{ crop.density }}</p>
+                <p class="card-text">Дата засева: {{ crop.sowing_date }} Дата сбора: {{ crop.harvest_date }}</p>
+                <div class="float-right offset item">
+                    <button type="button" class="btn btn-outline-primary m-1">Редактировать</button>
+                    <button type="button" class="btn btn-outline-primary m-1">Удалить</button>
+                </div>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Сезон: {{ crop.season }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

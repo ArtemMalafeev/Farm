@@ -6,7 +6,7 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 from django.contrib import messages
 from django.db.models import Sum
-from django.http import HttpResponse , JsonResponse
+from django.http import Http404 , HttpResponse , JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import DetailView, ListView
