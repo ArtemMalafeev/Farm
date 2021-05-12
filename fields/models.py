@@ -23,6 +23,7 @@ class Season(models.Model):
 class Culture(models.Model):
     name = models.CharField(max_length=128, unique=True)
     slug = models.SlugField(max_length=128, unique=True)
+    logo = models.ImageField(upload_to='cultures')
 
     def __str__(self):
         return self.name
@@ -47,6 +48,11 @@ class Field(models.Model):
     class Meta:
         verbose_name = 'Поле'
         verbose_name_plural = 'Поля'
+
+    def get_coordinate_field(self):
+        result = self.coordinate.split(',')[:2]
+
+        return ', '.join(result)
 
     def get_absolute_url(self):
         return reverse('fields:field_detail', args=[self.slug])
@@ -113,7 +119,7 @@ class Job(models.Model):
                                verbose_name='Сезон')
     start_job = models.DateTimeField(verbose_name='Начало работы')
     end_job = models.DateTimeField(verbose_name='Конец работы')
-    fields = models.ManyToManyField(Field, verbose_name='Список полей')
+    fields = models.ManyToManyField(Field, related_name='jobs', verbose_name='Список полей')
     workers = models.ManyToManyField(Worker, verbose_name='Исполнители', related_name='jobs')
     comment = models.TextField(verbose_name='Комментарии', blank=True)
 

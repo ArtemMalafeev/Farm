@@ -39,7 +39,8 @@ class FieldDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['crops_list'] = self.object.crops.all()  # Добавляем информацию по севам
+        context['crops_list'] = self.object.crops.all().order_by('-season')  # Добавляем информацию по севам
+        context['works_list'] = self.object.jobs.all().order_by('-season') # Добавляем информацию по работам
 
         return context
 

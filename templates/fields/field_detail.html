@@ -1,47 +1,121 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<script>
+    $(function() {
+        $(document).on('click', function(e){
+            if ($(e.target).closest('.card').is('[data-bs-target]')) {
+            e.preventDefault();
+            location.href = $(e.target).closest('.card').attr('data-bs-target');
+        }
+    });
+});
+</script>
 
-<h2>Информация по полю: </h2>
-<p>Название: {{ field.name }}</p>
-<p>Площаль поля: {{ field.square }} га.</p>
-<p>Координаты: {{ field.coordinate }}</p>
-<p>Кадастровый номер: {{ field.cadastral_number }}</p>
+<div class="container-fluid p-0">
+    <div class="row">
+        <div class="col-md-3">
+            <h2>Информация по полю: </h2>
+            <p>Название: {{ field.name }}</p>
+            <p>Площаль поля: {{ field.square }} га.</p>
+            <p>Координаты: {{ field.get_coordinate_field }}</p>
+            <p>Кадастровый номер: {{ field.cadastral_number }}</p>
 
-<a href="{% url 'fields:edit_field' slug=field.slug %}" class="btn btn-outline-primary">Редактировать поле</a>
+            <a href="{% url 'fields:edit_field' slug=field.slug %}" class="btn btn-outline-primary">Редактировать
+                поле</a>
+        </div>
+        <div class="col-md-9" id="map" style="height: 35vh"></div>
+    </div>
+</div>
 
-<!--<h3>Cевооборот:</h3>-->
-<!--<ul>-->
-<!--    {% for crop in crops_list %}-->
-<!--    <li>-->
-<!--        <p>Сезон: {{ crop.season }}</p>-->
-<!--        <p>Культура: {{ crop.culture }}</p>-->
-<!--        <p>Фактический урожай: {{ crop.actual_harvest }} ц.</p>-->
-<!--        <p>Плотность засева: {{ crop.density }}</p>-->
-<!--        <a href="№" class="btn btn-outline-primary">Редактировать севооборот</a>-->
-<!--    </li>-->
-<!--    {% endfor %}-->
-<!--</ul>-->
+<hr>
 
-<h3 class="mt-3">Cевооборот:</h3>
-<div class="row row-cols-1 row-cols-md-4 mb-1 g-4">
+<!--<h2>Информация по полю: </h2>-->
+<!--<p>Название: {{ field.name }}</p>-->
+<!--<p>Площаль поля: {{ field.square }} га.</p>-->
+<!--<p>Координаты: {{ field.get_coordinate_field }}</p>-->
+<!--<p>Кадастровый номер: {{ field.cadastral_number }}</p>-->
+
+<h3 class="mt-3">Cевооборот</h3>
+<div class="row row-cols-1 row-cols-md-4 mb-3 g-4">
     {% for crop in crops_list %}
     <div class="col">
-        <div class="card">
-            <img src="#" class="card-img-top" alt="...">
+        <div class="card shadow mb-2 bg-white rounded">
+            <img src="{{ crop.culture.logo.url }}" height="100" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{ crop.culture }}</h5>
                 <p class="card-text">Планируемый урожай: {{ crop.planned_harvest }}</p>
                 <p class="card-text">Фактический урожай: {{ crop.actual_harvest }}</p>
                 <p class="card-text">Плотность засева: {{ crop.density }}</p>
                 <p class="card-text">Дата засева: {{ crop.sowing_date }} Дата сбора: {{ crop.harvest_date }}</p>
-                <div class="float-right offset item">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="button" class="btn btn-outline-primary m-1">Редактировать</button>
                     <button type="button" class="btn btn-outline-primary m-1">Удалить</button>
                 </div>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Сезон: {{ crop.season }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<hr>
+
+<h3 class="mt-3">Работы</h3>
+<div class="row row-cols-1 row-cols-md-3 mb-1 g-4">
+    {% for work in works_list %}
+    <!--    <a href="{% url 'fields:work_detail' work.pk %}">-->
+    <div class="col">
+        <div class="card shadow mb-2 bg-white rounded" data-bs-target="{% url 'fields:work_detail' work.pk %}">
+            {% if work.get_status_job  == "Ожидается" %}
+                <div class="card-header bg-warning bg-gradient text-white">
+            {% elif work.get_status_job == "Выполняется" %}
+                <div class="card-header bg-primary bg-gradient text-white">
+            {% else %}
+                <div class="card-header bg-success bg-gradient text-white">
+            {% endif %}
+                <h6 class="card-title mt-1">{{ work.category }}</h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Старт: {{ work.start_job }}</p>
+                <p class="card-text">Конец: {{ work.end_job }}</p>
+                <div class="progress">
+                {% if work.get_status_job  == "Ожидается" %}
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{ work.get_process_job }}%;"
+                         aria-valuenow="25"
+                         aria-valuemin="0" aria-valuemax="100">{{ work.get_process_job }}%
+                    </div>
+                {% elif work.get_status_job == "Выполняется" %}
+                    <div class="progress-bar" role="progressbar" style="width: {{ work.get_process_job }}%;"
+                         aria-valuenow="25"
+                         aria-valuemin="0" aria-valuemax="100">{{ work.get_process_job }}%
+                    </div>
+                {% else %}
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ work.get_process_job }}%;"
+                         aria-valuenow="25"
+                         aria-valuemin="0" aria-valuemax="100">{{ work.get_process_job }}%
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Сезон: {{ work.season }} Статус: {{ work.get_status_job }}</small>
             </div>
         </div>
     </div>
