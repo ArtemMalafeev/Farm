@@ -17,7 +17,7 @@
         <div class="col-md-3">
             <h2>Информация по полю: </h2>
             <p>Название: {{ field.name }}</p>
-            <p>Площаль поля: {{ field.square }} га.</p>
+            <p>Площаль поля: {{ field.square_ha }} га.</p>
             <p>Координаты: {{ field.get_coordinate_field }}</p>
             <p>Кадастровый номер: {{ field.cadastral_number }}</p>
 
@@ -44,10 +44,19 @@
             <img src="{{ crop.culture.logo.url }}" height="100" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{ crop.culture }}</h5>
-                <p class="card-text">Планируемый урожай: {{ crop.planned_harvest }}</p>
-                <p class="card-text">Фактический урожай: {{ crop.actual_harvest }}</p>
-                <p class="card-text">Плотность засева: {{ crop.density }}</p>
-                <p class="card-text">Дата засева: {{ crop.sowing_date }} Дата сбора: {{ crop.harvest_date }}</p>
+                <p class="card-text">Планируемый урожай: {{ crop.planned_harvest }} ц/га</p>
+                {% if crop.actual_harvest is None %}
+                <p class="card-text">Фактический урожай: -</p>
+                {% else %}
+                <p class="card-text">Фактический урожай: {{ crop.actual_harvest }} ц/га</p>
+                {% endif %}
+                <p class="card-text">Дата засева: {{ crop.sowing_date }}</p>
+                {% if crop.harvest_date is None %}
+                <p class="card-text">Дата сбора: Ожидается</p>
+                {% else %}
+                <p class="card-text">Дата сбора: {{ crop.harvest_date }}</p>
+                {% endif %}
+
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="button" class="btn btn-outline-primary m-1">Редактировать</button>
                     <button type="button" class="btn btn-outline-primary m-1">Удалить</button>

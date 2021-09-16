@@ -1,8 +1,6 @@
 from io import BytesIO
 
 from docx import Document
-from docx.shared import Inches
-from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 from django.contrib import messages
 from django.db.models import Sum
@@ -39,8 +37,8 @@ class FieldDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['crops_list'] = self.object.crops.all().order_by('-season')  # Добавляем информацию по севам
-        context['works_list'] = self.object.jobs.all().order_by('-season') # Добавляем информацию по работам
+        context['crops_list'] = self.object.crops.all().order_by('-sowing_date')  # Добавляем информацию по севам
+        context['works_list'] = self.object.jobs.all().order_by('-start_job') # Добавляем информацию по работам
 
         return context
 
@@ -58,6 +56,8 @@ class FieldCreateView(View):
             field = form.save(commit=False)
             field.user = user
             field.save()
+
+            messages.add_message(request , messages.INFO , 'Поле успешно добавлено!')
 
             return redirect('/fields/add/')
 

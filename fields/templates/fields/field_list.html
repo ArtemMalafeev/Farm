@@ -26,21 +26,21 @@ $(document).ready(function() {
 
 
 
+
+
 </script>
 
 <div class="content">
-    <h3>Поля:</h3>
-
-    <a href="{% url 'fields:add_field' %}" class="btn btn-info mb-2">Добавить поле</a>
+    <h3 class="mt-2">Поля:</h3>
 
     <table id="table">
         <thead>
         <tr>
             <th>Название поля</th>
-            <th>Площадь</th>
+            <th>Площадь, га</th>
             <th>Сезон</th>
             <th>Сев</th>
-            <th>Урожайность</th>
+            <th>Урожайность, ц/га</th>
         </tr>
         </thead>
 
@@ -48,12 +48,24 @@ $(document).ready(function() {
         {% for info in data %}
         <tr>
             <td><a href="{{ info.field.get_absolute_url }}">{{ info.field.name }}</a></td>
-            <td>{{ info.field.square }}</td>
+            <td>{{ info.field.square_ha }}</td>
             <td>{{ info.season.name }}</td>
             <td>{{ info.culture.name }}</td>
-            <td>{{ info.season.actual_harvest }}</td>
+            {% if info.actual_harvest is None %}
+            <td style="color: red">Ожидается</td>
+            {% else %}
+            <td>{{ info.actual_harvest }}</td>
+            {% endif %}
         </tr>
         {% endfor %}
+
+        <tr>
+            <td><a href="Поле 16">Поле 16</a></td>
+            <td>23,75</td>
+            <td>-</td>
+            <td>Ожидается</td>
+            <td style="color: red">Ожидается</td>
+        </tr>
         </tbody>
     </table>
 
@@ -67,6 +79,8 @@ $(document).ready(function() {
         </a>
         {% endfor %}
     </ul>
+
+    <a href="{% url 'fields:add_field' %}" class="btn btn-primary mb-2">Добавить поле</a>
 </div>
 
 {% endblock %}

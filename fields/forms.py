@@ -34,6 +34,7 @@ class FieldForm(forms.ModelForm):
             Submit('submit', 'Добавить', css_class='form-row text-center')
         )
 
+
 class SchedulerProfileChoiceField(ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         return "%s %s" % (obj.firstname, obj.lastname)

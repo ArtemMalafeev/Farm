@@ -36,7 +36,7 @@ formJob.addEventListener('submit', e=> {
         enctype: 'multipart/form-data',
         data: fd,
         success: function(response) {
-            handleAlerts('success', 'Добавлено! Дурачок не забудь поправить верстку')
+            handleAlerts('success', 'Работа успешно добавлена!')
             console.log('----');
             console.log(response);
         },
